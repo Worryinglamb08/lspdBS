@@ -1,0 +1,79 @@
+.table-fixed tbody {
+  height: 300px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+  display: block;
+}
+
+.table-fixed tbody td, .table-fixed tbody th, .table-fixed thead > tr > th {
+  float: left;
+  position: relative;
+}
+
+thead {
+  background-color: #211f74;
+}
+
+#headTable {
+}
+
+#tableHead {
+  background-color: #ffffff;
+}
+
+.tableHead {
+  background-color: #25476a;
+  color: rgb(255,255,255);
+  font-size: 28px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 10px;
+}
+
+.footerPerso {
+  background-color: transparent;
+  margin-top: 50px;
+}
+
+.pannelPerso {
+  padding-bottom: 15px;
+  background-color: #e8e5e5;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-left: 15px;
+}
+
+.linkWhite {
+  color: white!important;
+}
+
+.linkWhite:hover {
+  color: rgb(13,13,136)!important;
+}
+
+.iconGrade {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+@media (max-width: 600px) {
+  .d-sm-flex.align-items-sm-center {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar.navbar-light.navbar-expand-md {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .d-sm-flex.justify-content-sm-between {
+    width: 100%;
+  }
+}
+

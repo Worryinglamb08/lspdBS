@@ -2,11 +2,17 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>LSPD - {% block title %}{% endblock %}</title>
+        {% include 'partials/head.html.twig' %}
+        <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% include 'partials/nav.html.twig' %}
+        {% include 'partials/flash.html.twig' %}
         {% block body %}{% endblock %}
+        {% include 'partials/footer.html.twig' %}
+        {% include 'partials/js.html.twig' %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
