@@ -19,6 +19,17 @@ class GradeRepository extends ServiceEntityRepository
         parent::__construct($registry, Grade::class);
     }
 
+    public function findByRangSup($rang)
+    {
+        return $this->createQueryBuilder('g')
+            ->where('g.rang > :rang')
+            ->andWhere('g.name != :valid')
+            ->setParameter('valid', 'ROLE_valid')
+            ->setParameter('rang', $rang)
+            ->orderBy('g.rang', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return Grade[] Returns an array of Grade objects
     //  */

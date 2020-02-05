@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Users;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,6 +32,12 @@ class RegisterType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Adresse mail'
+                ]
+            ])
+            ->add('indicatif', IntegerType::class, [
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Indicatif'
                 ]
             ])
             ->add('pwd', PasswordType::class, [

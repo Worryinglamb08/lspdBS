@@ -19,6 +19,28 @@ class UsersRepository extends ServiceEntityRepository
         parent::__construct($registry, Users::class);
     }
 
+    public function findLspdMember()
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.grade', 'g')
+            ->where('g.rang > -1')
+            ->orderBy('g.rang', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findNoValid()
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.grade', 'g')
+            ->where('g.name = :NoValid')
+            ->setParameter('NoValid', 'ROLE_NoValid')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
     // /**
     //  * @return Users[] Returns an array of Users objects
     //  */

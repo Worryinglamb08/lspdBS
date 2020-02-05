@@ -66,6 +66,29 @@ class Users implements UserInterface
      */
     private $grade;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $indicatif;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function createUserDate()
+    {
+        if (empty($this->createdAt)) {
+            $now = new \DateTime;
+            $now->setTimezone(new \DateTimeZone('Europe/Paris'));
+            $this->createdAt = $now;
+        }
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -203,5 +226,29 @@ class Users implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getIndicatif(): ?int
+    {
+        return $this->indicatif;
+    }
+
+    public function setIndicatif(?int $indicatif): self
+    {
+        $this->indicatif = $indicatif;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 }

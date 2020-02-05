@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+{% block title %}Effectif{% endblock %}
+{% block body %}
+    <div id="wrapper" style="margin-top: 20px;">
+        <div class="d-flex flex-column" id="content-wrapper" style="background-color: transparent;">
+            <div id="content" style="margin-top: 30px;">
+                <div class="container-fluid">
+                    <h3 class="text-center border rounded shadow tableHead">Liste des employes</h3>
+                    <div class="table-responsive border rounded shadow" style="background-color: #e8e4e4;">
+                        <table class="table">
+                            <thead style="color: rgb(255,255,255);background-color: #25476a;">
+                                <tr>
+                                    <th>Indicatif</th>
+                                    <th>Nom Prenom</th>
+                                    <th>Grade</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody style="color: rgb(0,0,0);">
+                                {% for membre in membres %}
+                                    <tr>
+                                        <td>{{ (membre.indicatif) ? membre.indicatif : 'NC' }}</td>
+                                        <td>{{ membre.fullName }}</td>
+                                        <td class="row">
+                                            <div class="col-4">
+                                                {{ membre.grade.name[5:] }}
+                                            </div>
+                                            <div class="col-6">
+                                                <form action="{{ path('switchGrade') }}" method="post">
+                                                    Changer de grade
+                                                    <input type="text" hidden value="{{ membre.id }}" name="id">
+                                                    <select name="grade" class="custom-select col-lg-4">
+                                                        {% for grade in grades %}
+                                                            <option value="{{ grade.name }}">{{ grade.name[5:] }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <button class="btn btn-primary btn-sm ml-1" type="submit" role="button"><i class="fa fa-superpowers"></i></button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                        <td style="width: 180px;">
+                                            <a href="{{ path('userRemove', {'id': membre.id}) }}"><i class="fa fa-window-close-o" style="padding: 5px;color: rgb(255,46,0);"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if app.user.grade.superAdmin %}
+                        {% if noValidUsers is not empty %}
+                            <h3 class="text-center border rounded shadow tableHead">Demande d'acces</h3>
+                            <div class="table-responsive border rounded shadow" style="background-color: #e8e4e4;">
+                                <table class="table">
+                                    <thead style="color: rgb(255,255,255);background-color: #25476a;">
+                                    <tr>
+                                        <th>Indicatif</th>
+                                        <th>Nom Prenom</th>
+                                        <th>Date & Heur de demande</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="color: rgb(0,0,0);">
+                                    {% for membre in noValidUsers %}
+                                        <tr>
+                                            <td>{{ (membre.indicatif) ? membre.indicatif : 'NC' }}</td>
+                                            <td>{{ membre.fullName }}</td>
+                                            <td>{{ membre.createdAt|date('d/m/Y H:i:s') }}</td>
+                                            <td style="width: 180px;">
+                                                <a href="{{ path('userValidator', {'id' : membre.id}) }}"><i class="fa fa-check-square-o iconGrade" style="padding: 5px;color: rgb(10,180,37);"></i></a>
+                                                <a href="{{ path('userRemove', {'id': membre.id}) }}"><i class="fa fa-window-close-o" style="padding: 5px;color: rgb(255,46,0);"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif %}
+                        <h3 class="text-center border rounded shadow tableHead">Liste des grades</h3>
+                        <div class="row">
+                            <div class="col-xl-5 text-center pannelPerso shadow">
+                                <h1 class="text-center border rounded shadow tableHead" style="padding: 0px;">Nouveau grade</h1>
+                                <form action="{{ path('addGrade') }}" method="post">
+                                    <div class="form-group">
+                                        <div class="form-row" style="margin-right: 0px;margin-left: 0px;padding-top: 5px;">
+                                            <div class="col-md-10 offset-md-1">
+                                                <input class="form-control" type="number" style="margin-left:0px;font-family:Roboto, sans-serif;" name="order" placeholder="Ordre">
+                                            </div>
+                                        </div>
+                                        <div class="form-row" style="margin-right: 0px;margin-left: 0px;padding-top: 5px;">
+                                            <div class="col-md-10 offset-md-1">
+                                                <input class="form-control" type="text" style="margin-left:0px;font-family:Roboto, sans-serif;" name="name" placeholder="Nom">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">Enregistrer</button>
+                                </form>
+                            </div>
+                            <div class="col">
+                                <div class="table-responsive border rounded shadow" style="background-color: #e8e5e5;">
+                                    <table class="table">
+                                        <thead style="color: rgb(255,255,255);background-color: #25476a;">
+                                            <tr>
+                                                <th style="width: 100px;">Ordre</th>
+                                                <th>Nom grade</th>
+                                                <th style="width: 127px;">Acces admin</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="color: rgb(0,0,0);">
+                                        {% for grade in grades %}
+                                            <tr>
+                                                <td>{{ grade.rang }}
+                                                    <a href="{{ path('upGrade', {'id':grade.id}) }}"><i class="fa fa-toggle-up" style="padding: 5px;color: rgb(10,180,37);"></i></a>
+                                                    {% if grade.rang != 0 %}
+                                                        <a href="{{path('downGrade', {'id':grade.id})}}"><i class="fa fa-toggle-down" style="padding: 5px;color: rgb(80,100,248);"></i></a>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ grade.name[5:] }}</td>
+                                                <td class="text-center">
+                                                    {{ (grade.superAdmin) ? '<i class="fa fa-check-square-o iconGrade" style="color: rgb(13,163,0);"></i>' : '<i class="fa fa-window-close-o iconGrade" style="color: rgb(227,38,38);"></i>' }}
+                                                    <a href="{{ path('toggleAdmin', {'id':grade.id}) }}"><i class="fa fa-exchange iconGrade" style="color: #192965;"></i></a>
+                                                </td>
+                                                <td style="width: 180px;">
+                                                    <i class="fa fa-toggle-up" style="padding: 5px;color: rgb(10,180,37);"></i>
+                                                    <a href="{{ path('rmGrade', {'id':grade.id}) }}"><i class="fa fa-window-close-o" style="padding: 5px;color: rgb(255,46,0);"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
