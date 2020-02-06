@@ -242,4 +242,55 @@ class UsersController extends AbstractController
         $manager->flush();
         return $this->redirectToRoute('effectif');
     }
+
+    /**
+     * Edit profil
+     * @Route("/profil", name="profil")
+     */
+    public function profil()
+    {
+        $user = $this->getUser();
+        return $this->render('home/profil.html.twig', [
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * effectue les changemements du profil
+     * @Route("/profil/change", name="changeProfil")
+     */
+    public function changeProfil(EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    {
+        $user = $this->getUser();
+        if (isset($_POST['changeTel'])) {
+            $newTel = htmlspecialchars(trim($_POST['tel']));
+            $indicatif = htmlspecialchars(trim($_POST['indicatif']));
+            $user->setTel($newTel);
+            $user->setIndicatif($indicatif);
+            $manager->persist($user);
+            $manager->flush();
+            return $this->redirectToRoute('profil');
+        }
+        if (isset($_POST['changePwd'])) {
+            if ($_POST['pwd'] === $_POST['conf']){
+                $newPwd = htmlspecialchars(trim($_POST['pwd']));
+                $pwd = $encoder->encodePassword($user, $newPwd);
+                $user->setPwd($pwd);
+                $manager->persist($user);
+                $manager->flush();
+                $this->addFlash(
+                    'success',
+                    'Mot de passe change'
+                );
+                return $this->redirectToRoute('profil');
+            }else{
+                $this->addFlash(
+                    'warning',
+                    'Mot de passe différent'
+                );
+                return $this->redirectToRoute('profil');
+            }
+        }
+        return $this->redirectToRoute('profil');
+    }
 }

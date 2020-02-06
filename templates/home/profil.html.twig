@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block title %}Acceuil{% endblock %}
+{% block body %}
+    <div id="wrapper" style="margin-top: 20px;">
+        <div class="d-flex flex-column" id="content-wrapper" style="background-color: transparent;">
+            <div id="content" style="margin-top: 30px;">
+                <div class="container bg-gray-300 rounded pr-3 pl-3 pb-3 pt-1">
+                    <h3 class="text-center mt-3">Fiche employe</h3>
+                    <div class="row">
+                        <h5 class="row col m-2">{{ user.nom }}</h5>
+                        <h5 class="row col m-2">{{ user.prenom }}</h5>
+                        <h5 class="row col m-2">{{ user.mail }}</h5>
+                        <form action="{{ path('changeProfil') }}" class="col row" name="changeTel" method="post">
+                            <div class="col-6">
+                                <label class="" for="tel">Tel</label>
+                                <input class="form-control" name="tel" type="text" value="{{ user.tel }}" placeholder="Télephone">
+                            </div>
+                            <div class="col-4">
+                                <label for="">Indicatif</label>
+                                <input class="form-control" name="indicatif" type="number" value="{{ user.indicatif }}" placeholder="indicatif">
+                            </div>
+                            <button class="btn btn-info col-2" type="submit" name="changeTel"><i class="fa fa-save"></i></button>
+                        </form>
+                    </div>
+                    <hr>
+                    <h3>Changement de mot de passe</h3>
+                    <form class="row form-inline mt-3" action="{{ path('changeProfil') }}" method="post">
+                        <div class="col">
+                            <input class="form-control" name="pwd" type="password" placeholder="nouveau password">
+                        </div>
+                        <div class="col">
+                            <input class="form-control" name="conf" type="password" placeholder="Confirmation">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-info col" type="submit" name="changePwd"><i class="fa fa-user-secret"></i>   Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
