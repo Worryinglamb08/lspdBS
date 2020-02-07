@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}Effectif{% endblock %}
 {% block body %}
+    {% set admin = app.user.grade.superAdmin %}
     <div id="wrapper" style="margin-top: 20px;">
         <div class="d-flex flex-column" id="content-wrapper" style="background-color: transparent;">
             <div id="content" style="margin-top: 30px;">
@@ -13,7 +14,7 @@
                                     <th>Indicatif</th>
                                     <th>Nom Prenom</th>
                                     <th>Grade</th>
-                                    <th>Action</th>
+                                    {{ (admin) ? '<th>Action</th>' }}
                                 </tr>
                             </thead>
                             <tbody style="color: rgb(0,0,0);">
@@ -25,6 +26,7 @@
                                             <div class="col-4">
                                                 {{ membre.grade.name[5:] }}
                                             </div>
+                                            {% if admin %}
                                             <div class="col-6">
                                                 <form action="{{ path('switchGrade') }}" method="post">
                                                     Changer de grade
@@ -37,10 +39,13 @@
                                                     <button class="btn btn-primary btn-sm ml-1" type="submit" role="button"><i class="fa fa-superpowers"></i></button>
                                                 </form>
                                             </div>
+                                            {% endif %}
                                         </td>
+                                        {% if admin %}
                                         <td style="width: 180px;">
                                             <a href="{{ path('userRemove', {'id': membre.id}) }}"><i class="fa fa-window-close-o" style="padding: 5px;color: rgb(255,46,0);"></i></a>
                                         </td>
+                                        {% endif %}
                                     </tr>
                                 {% endfor %}
                             </tbody>

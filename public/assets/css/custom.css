@@ -4,3 +4,8 @@ html {
 body {
     background-color: transparent!important;
 }
+
+.dropdown-item:hover {
+    background-color: #25476a;
+    color: white;
+}

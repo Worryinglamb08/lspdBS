@@ -191,6 +191,9 @@ class Users implements UserInterface
     {
         // TODO: Implement getRoles() method.
         $grade = $this->getGrade()->getName();
+        if ($grade == 'ROLE_NoValid'){
+            return [];
+        }
         return [$grade];
     }
 
