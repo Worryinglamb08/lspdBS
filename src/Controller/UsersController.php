@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Grade;
 use App\Entity\Users;
+use App\Form\GradeType;
 use App\Form\RegisterType;
 use App\Repository\GradeRepository;
 use App\Repository\UsersRepository;
@@ -88,15 +89,31 @@ class UsersController extends AbstractController
      * @param UsersRepository $repository
      * @return Response
      */
-    public function effectif(UsersRepository $usersRepo, GradeRepository $gradeRepo)
+    public function effectif(UsersRepository $usersRepo, GradeRepository $gradeRepo, Request $request, EntityManagerInterface $manager)
     {
+        $grade = new Grade();
+        $form = $this->createForm(GradeType::class, $grade);
+
+        $request->request->set('grade', array(
+            'rang' => $request->request->get('grade')['rang'],
+            'name' => 'ROLE_'.$request->request->get('grade')['name'],
+            '_token' => $request->request->get('grade')['_token']
+        ));
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $grade->setSuperAdmin(false);
+            $manager->persist($grade);
+            $manager->flush();
+            return $this->redirectToRoute('effectif');
+        }
         $membreList = $usersRepo->findLspdMember();
         $gradeList = $gradeRepo->findByRangSup(-1);
         $noValidUsers = $usersRepo->findNoValid();
         return $this->render('home/effectif.html.twig', [
             'membres' => $membreList,
             'grades' => $gradeList,
-            'noValidUsers' => $noValidUsers
+            'noValidUsers' => $noValidUsers,
+            'form' => $form->createView(),
         ]);
     }
 
